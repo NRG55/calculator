@@ -2,6 +2,7 @@ const buttonsNumber = document.querySelectorAll('.btnNumber');
 const buttonsOperator = document.querySelectorAll('.btnOperator');
 const buttonEqual = document.querySelector('.btnEqual');
 const buttonClear = document.querySelector('.btnClear');
+const buttonDelete = document.querySelector('.btnDelete');
 const display = document.querySelector('.displayInfo');
 
 let oldNumber = '';
@@ -21,10 +22,9 @@ buttonsOperator.forEach((buttonOp) => {
     });
 });
 
-buttonEqual.addEventListener('click', getResult)
-
-buttonClear.addEventListener('click', clearAll)
-
+buttonEqual.addEventListener('click', getResult);
+buttonClear.addEventListener('click', clearAll);
+buttonDelete.addEventListener('click', deleteLastDigit);
 
 function add(num1, num2) {
     return num1 + num2;
@@ -70,14 +70,16 @@ function operate(oldNum, newNum, op) {
 
     if (op === '/' ) {
         oldNumber = divide(oldNum, newNum); 
-        console.log(result)          
+        console.log(oldNumber)          
     }
     
-    
+    oldNumber = Math.round(oldNumber * 10) / 10;
+    console.log( 'Rounded number is ' + oldNumber);
     oldNumber = oldNumber.toString();
     display.textContent = oldNumber;
     operator = '';
     newNumber = '';
+    checkNumberLength();
 }
 
 
@@ -95,9 +97,9 @@ function operatorCheck(operatorReceived) {
         newNumber = '';
         //console.log(newNumber)
         operator = operatorReceived;
+        console.log(operator)
         display.textContent = oldNumber;
-    } else if (newNumber === '') {
-        oldNumber = newNumber;
+    } else if (newNumber === '') {        
         newNumber = '';
         operator = operatorReceived;
         display.textContent = oldNumber;
@@ -105,14 +107,35 @@ function operatorCheck(operatorReceived) {
         operate(oldNumber, newNumber, operator);
         operator = operatorReceived;
     }
-/
+
 }
-function numberCheck (number) {
+function numberCheck(number) {
     if (oldNumber !== '' && newNumber !== '' && operator !== ''){
         display.textContent = newNumber;
     }
-    if (newNumber.length < 11) {
+    if (newNumber.length <= 10) {
         newNumber += number;
         display.textContent = newNumber;
     }  
 }
+
+function checkNumberLength() {
+    if (oldNumber.length <= 10) {
+        display.textContent = oldNumber
+    }
+
+    if (oldNumber.length > 10) {
+        display.textContent = oldNumber.slice(0, 10) + '...';
+    }
+}
+
+function deleteLastDigit() {
+    if (newNumber !== '') {
+        newNumber = newNumber.slice(0, -1);
+        display.textContent = newNumber;
+    }
+    return;
+   
+}
+
+
