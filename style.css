@@ -25,8 +25,8 @@ body {
 }
 
 button {
-    width: 85px;
-    height: 85px;
+    width: 86px;
+    height: 86px;
     font-size: 40px;
     border: none;
     border-radius: 10px;   
@@ -41,7 +41,7 @@ button:active {
 }
 
 .btnEqual, .btnClear {
-    width: 174px;
+    width: 176px;
 }
 
 #btnClearId {
