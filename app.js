@@ -2,13 +2,19 @@ const buttonsNumber = document.querySelectorAll('.btnNumber');
 const buttonsOperator = document.querySelectorAll('.btnOperator');
 const buttonEqual = document.querySelector('.btnEqual');
 const buttonClear = document.querySelector('.btnClear');
-const buttonDelete = document.querySelector('.btnDelete');
+const buttonBackspace = document.querySelector('.btnBackspace');
+const buttonPoint = document.querySelector('.btnPoint');
 const display = document.querySelector('.displayInfo');
 
 let oldNumber = '';
 let newNumber = '';
-let tempNumber ='';
 let operator = '';
+
+buttonEqual.addEventListener('click', getResult);
+buttonClear.addEventListener('click', clearAll);
+buttonBackspace.addEventListener('click', deleteLastDigit);
+buttonPoint.addEventListener('click', setPointNumber);
+
 
 buttonsNumber.forEach((button) => {
     button.addEventListener('click', (btn) => {
@@ -22,10 +28,6 @@ buttonsOperator.forEach((buttonOp) => {
     });
 });
 
-buttonEqual.addEventListener('click', getResult);
-buttonClear.addEventListener('click', clearAll);
-buttonDelete.addEventListener('click', deleteLastDigit);
-
 function add(num1, num2) {
     return num1 + num2;
 }
@@ -38,7 +40,7 @@ function multiply(num1, num2) {
     return num1 * num2;
 }
 
-function divide(num1, num2) {
+function divide(num1, num2) {    
     return num1 / num2;
 }
 
@@ -51,10 +53,7 @@ function getResult() {
 
 function operate(oldNum, newNum, op) {    
     oldNum = Number(oldNum);
-    newNum = Number(newNum);
-    console.log(oldNum)
-    console.log(newNum)
-    //console.log(op)
+    newNum = Number(newNum);   
     
     if (op === '+' ) {          
       oldNumber = add(oldNum, newNum);           
@@ -69,19 +68,24 @@ function operate(oldNum, newNum, op) {
     }
 
     if (op === '/' ) {
-        oldNumber = divide(oldNum, newNum); 
-        console.log(oldNumber)          
+        if (newNum === 0) {            
+            operator = '';
+            newNumber = '';
+            oldNumber = '';
+            display.textContent = "Divided by 0";            
+            return ;
+        }
+
+        oldNumber = divide(oldNum, newNum);             
     }
     
-    oldNumber = Math.round(oldNumber * 10) / 10;
-    console.log( 'Rounded number is ' + oldNumber);
+    oldNumber = Math.round(oldNumber * 100) / 100;   
     oldNumber = oldNumber.toString();
     display.textContent = oldNumber;
     operator = '';
     newNumber = '';
     checkNumberLength();
 }
-
 
 function clearAll() {
     oldNumber = '';
@@ -92,23 +96,22 @@ function clearAll() {
 
 function operatorCheck(operatorReceived) {
     if (oldNumber === '') {
-        oldNumber = newNumber;
-        //console.log(oldNumber);
-        newNumber = '';
-        //console.log(newNumber)
-        operator = operatorReceived;
-        console.log(operator)
+        oldNumber = newNumber;       
+        newNumber = '';      
+        operator = operatorReceived;        
         display.textContent = oldNumber;
+
     } else if (newNumber === '') {        
         newNumber = '';
         operator = operatorReceived;
         display.textContent = oldNumber;
+
     } else { 
         operate(oldNumber, newNumber, operator);
         operator = operatorReceived;
     }
-
 }
+
 function numberCheck(number) {
     if (oldNumber !== '' && newNumber !== '' && operator !== ''){
         display.textContent = newNumber;
@@ -134,8 +137,16 @@ function deleteLastDigit() {
         newNumber = newNumber.slice(0, -1);
         display.textContent = newNumber;
     }
-    return;
-   
+    return;  
+}
+
+function setPointNumber() {
+    if (newNumber.includes('.')) {
+        return;
+    }
+
+    newNumber += '.';
+    display.textContent = newNumber;
 }
 
 
