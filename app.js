@@ -14,6 +14,7 @@ buttonEqual.addEventListener('click', getResult);
 buttonClear.addEventListener('click', clearAll);
 buttonBackspace.addEventListener('click', deleteLastDigit);
 buttonPoint.addEventListener('click', setPointNumber);
+window.addEventListener('keydown', keyboardCheck);
 
 
 buttonsNumber.forEach((button) => {
@@ -147,6 +148,42 @@ function setPointNumber() {
 
     newNumber += '.';
     display.textContent = newNumber;
+}
+
+function keyboardCheck(event) {
+    let key = event.key;
+   
+    if (key <= 9) {
+        numberCheck(key);
+    }
+
+    if (key === '+' || key === '-' || key === '/' || key === '*' || key === '=') {
+        
+        if (key === '=') {
+            key = '+';
+        }
+        if (key === '*') {
+            key = 'x';
+        }
+        operatorCheck(key);
+        console.log(key)
+    }
+
+    if (key === 'Enter' && oldNumber != '' && newNumber != '') {
+        operate(oldNumber, newNumber, operator);
+    }
+
+    if (key === 'Backspace') {
+        deleteLastDigit();
+    }
+
+    if (key === '.') {
+        setPointNumber();
+    }
+
+    if (key === 'Delete' || key === 'Escape') {
+        clearAll();
+    }     
 }
 
 
